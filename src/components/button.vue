@@ -1,7 +1,15 @@
 <template>
-  <button class="simple-button" :class="[`simple-button-${type}`]">
-    <slot>
-    </slot>
+  <button class="simple-button" @click="handleClick" :class="[`simple-button-${type}`, {
+    'is-plain': plain,
+    'is-round': round,
+    'is-circle': circle
+  }]">
+    <i v-if="icon" :class="icon"></i>
+    <!-- 如果没有传入任何的内容，当我们没有传入插槽的时候 -->
+    <span v-if="isDefaultSlotNotEmpty">
+      <slot>
+      </slot>
+    </span>
   </button>
 </template>
 
@@ -13,10 +21,36 @@ export default {
     type: {
       type: String,
       default: 'primary'
+    },
+    plain: {
+      type: Boolean,
+      default: false
+    },
+    round: {
+      type: Boolean,
+      default: false
+    },
+    circle: {
+      type: Boolean,
+      default: false
+    },
+    icon: {
+      type: String,
+      default: ''
+    }
+  },
+  computed: {
+    isDefaultSlotNotEmpty () {
+      return !!this.$slots.default
     }
   },
   created () {
     console.log(this.type)
+  },
+  methods: {
+    handleClick (e) {
+      this.$emit('click', e)
+    }
   }
 }
 </script>
